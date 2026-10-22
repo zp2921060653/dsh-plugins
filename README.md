@@ -9,6 +9,7 @@
 | dsh-agent-bridge | 让 DSH 调用本机其他 AI 编码 agent：Claude Code / Codex / 腾讯 Marvis（后台任务流式输出） | [agent-bridge/](agent-bridge/) |
 | dsh-ghidra | 让 DSH 操作 Ghidra 反编译：导入二进制、反编译函数、字符串、交叉引用（常驻 PyGhidra 服务器） | [ghidra-bridge/](ghidra-bridge/) |
 | dsh-reminder | 任务需要用户决定/辅助时，检测前台窗口（看剧/游戏），用声音/弹窗/黑白屏幕闪烁提醒用户回到工作；内置「桌面通知」设置页可调位置与闪烁参数 | [reminder-bridge/](reminder-bridge/) |
+| dsh-wukong-trainer-skill | 黑神话·悟空（UE5 + C# 托管层）修改器制作方法论：属性数组公式、属性 ID 表、五类功能手法、AOB+代码洞穴注入流程、7 个实战坑（**WIP：属性/传送/掉落已验证，灵蕴/无敌/速度待补**） | [wukong-trainer-skill/](wukong-trainer-skill/) |
 
 ## 安装
 
