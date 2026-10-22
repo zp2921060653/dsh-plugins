@@ -195,6 +195,49 @@ skip:
 | 6 | CE autoAssemble | 返回 nil 无提示 | **不能带 `[ENABLE]` 段头** |
 | 7 | AOB 自毁 | 打补丁后重扫找不到 | 按**已知地址**写回原始字节 |
 
+
+## 5.5 反作弊实测（重要，先看这个）
+
+| 操作 | 是否触发 |
+|---|---|
+| 外部 ReadProcessMemory / WriteProcessMemory（连续 5 小时） | ✅ 未触发 |
+| CE 附加进程（调试器） | ❌ 触发 |
+| CE 硬件断点（DR0-DR3） | ❌ 触发 |
+| CE 写代码补丁（AA 注入代码洞穴） | ❌ 触发（最严重） |
+
+触发后表现：弹窗 `警告 (3, 1060, 158004) 检测到黑客工具。请关闭不必要的程序，重启机器后再试。(1-1032)` → 游戏闪退。
+
+**处置流程**：
+1. 按**已知地址**写回所有被 patch 的原始字节（补丁会抹掉 AOB 特征码，不能靠重扫找回来）
+2. 关闭 Cheat Engine 等调试器
+3. 按提示重启机器（检测状态可能驻留）
+
+**结论**：该游戏对调试器/注入敏感，对外部读写相对宽容。
+做修改器**优先纯外部方案**；必须注入时先备份存档，并接受闪退风险。
+
+## 5.6 属性块多副本（关键工程经验）
+
+换地图/重载后，旧属性块**不会立即释放**，会留下值被冻结的副本：
+
+- 死副本的字段值依然**完全合理**（DEF 仍是 455、HPmax 仍是 875），用字段值判活**无效**
+- 用"N 秒内是否有变化"判活也不可靠（玩家静止时所有副本都不变）
+- 观察规律：活块通常是**较新 / 地址更高**的那一份
+- **最稳做法**：定位时返回所有 `score >= 100` 的候选，写入时**全部写一遍**（死副本写了无害，活块必然命中）
+
+参考实现（见 WukongTrainer）：
+@@@csharp
+// 定位后记录所有同分副本
+foreach (var other in PlayerLocator.FindCandidates(mem, _ => { }, ct))
+    if (other.Base != primary.Base) _mirrorBlocks.Add(other.Base);
+
+// 每 2 秒把同一批值同步写到所有副本
+foreach (var f in engine.Features) {
+    if (!f.Enabled || f.Definition.Type != FeatureType.Float) continue;
+    ulong off = f.Address - blockBase;
+    foreach (var m in _mirrorBlocks) mem.Write(m + off, (float)f.TargetValue);
+}
+@@@
+
 ## 6. TODO（未完成）
 
 - [ ] B 类接 GUI（无限生命/法力/体力/棍势）—— 复用 33ms 冻结即可
@@ -205,6 +248,8 @@ skip:
 - [ ] **属性钩子**：按 3.5 节实施（双钩子或 Plan B），做完可去掉重定位依赖
 - [ ] 速度/跳跃/游戏速度：找 setter 或常量
 - [ ] 补齐 FLiNG 的 44 项对照表与逐项验证记录
+- [ ] 属性块多副本：验证"地址更高者更新"的规律
+- [ ] 反作弊：确认重启后纯外部读写是否仍安全
 
 ## 7. 参考实现
 
