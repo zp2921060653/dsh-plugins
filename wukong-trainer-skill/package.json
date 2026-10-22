@@ -1,0 +1,22 @@
+{
+  "name": "dsh-wukong-trainer-skill",
+  "version": "0.1.0",
+  "description": "Agent skill for building game trainers for Black Myth: Wukong (UE5 + USharp/C# gameplay layer): attribute array formula, attribute ID table, five implementation patterns (direct write / freeze / code patch / accessor hook / engine params), AOB + code-cave injection workflow, and seven battle-tested pitfalls. Status: WIP (attribute / teleport / drops verified; wallet, god-mode and speed pending).",
+  "type": "module",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "lib",
+    "skills",
+    "README.md"
+  ],
+  "keywords": [
+    "dsh-plugin",
+    "skill",
+    "game-trainer",
+    "reverse-engineering",
+    "unreal-engine",
+    "black-myth-wukong"
+  ],
+  "license": "MIT"
+}
