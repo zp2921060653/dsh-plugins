@@ -1,0 +1,13 @@
+{
+  "name": "dsh-micropather",
+  "version": "0.1.2",
+  "description": "MicroPather bridge: solve grid pathfinding with the bundled MicroPather C++ A* engine.",
+  "type": "module",
+  "main": "index.js",
+  "files": ["index.js", "lib", "bin", "cordis.patch.yml", "README.md"],
+  "engines": { "node": ">=20" },
+  "license": "MIT",
+  "dsh": { "bundle": { "patch": "./cordis.patch.yml" } }
+}
+
+

@@ -1,6 +1,6 @@
 {
   "name": "dsh-wxapkg",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "WeChat mini-program (wxapkg) bridge: restore cached packages to source with a bundled wedecode, then analyze the restored project structure.",
   "type": "module",
   "main": "index.js",
@@ -27,7 +27,6 @@
     "multer": "^2.0.2",
     "open-file-explorer": "^1.0.2",
     "picocolors": "^1.0.1",
-    "schemastery": "^3.18.0",
     "single-line-log": "^1.1.2",
     "update-check": "^1.5.4",
     "vm2": "^3.9.19",

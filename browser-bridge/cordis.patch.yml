@@ -1,0 +1,6 @@
+- insert:
+    - id: browser
+      name: dsh-browser
+      config:
+        headless: false
+        defaultTimeoutMs: 25000

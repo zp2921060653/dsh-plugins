@@ -1,0 +1,11 @@
+{
+  "name": "dsh-dumper7",
+  "version": "0.1.0",
+  "description": "Dumper-7 bridge: inject the UE SDK dumper DLL into a running game and inspect the generated SDK.",
+  "type": "module",
+  "main": "index.js",
+  "files": ["index.js", "lib", "cordis.patch.yml", "README.md"],
+  "engines": { "node": ">=20" },
+  "license": "MIT",
+  "dsh": { "bundle": { "patch": "./cordis.patch.yml" } }
+}

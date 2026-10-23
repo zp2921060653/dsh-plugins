@@ -2,7 +2,7 @@
 // Decompiles cached mini-program packages with a bundled, patched wedecode,
 // then analyzes the restored project structure.
 import { defineTool } from '@deepseek-ai/dsh-tools'
-import Schema from 'schemastery'
+import Schema from '@deepseek-ai/schemastery'
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -13,9 +13,18 @@ import { analyzeProject, renderAnalysis } from './lib/analyze.js'
 export const name = 'wxapkg-bridge'
 export const inject = ['tools', 'jobs']
 
+// Node 运行时：优先 config.nodeBin；未配置时回退到 DSH 自带运行时
+// （Electron 以 ELECTRON_RUN_AS_NODE=1 方式当 node 用），
+// 因为官方桌面安装不保证 PATH 里有独立 node。
+function nodeRuntime(config) {
+  const c = (config.nodeBin || '').trim()
+  if (c && c !== 'node') return { cmd: c, env: process.env }
+  return { cmd: process.execPath, env: Object.assign({}, process.env, { ELECTRON_RUN_AS_NODE: '1' }) }
+}
+
 export const Config = Schema.object({
   wedecodeEntry: Schema.string().default(''),
-  nodeBin: Schema.string().default('node'),
+  nodeBin: Schema.string().default(''),
   extraScanRoots: Schema.string().default(''),
   defaultOutputDir: Schema.string().default(''),
   defaultTimeoutMs: Schema.number().default(900000),
@@ -164,8 +173,12 @@ export function apply(ctx, config) {
     } },
     async execute(_args, exec) {
       const entry = resolveEntry(config)
+      const nr = nodeRuntime(config)
       const res = { entry }
-      try { res.nodeVersion = String((await runProcess(config.nodeBin, ['--version'], { timeoutMs: 20000, maxOutputChars: 4096 })).stdout).trim() } catch (e) { res.nodeVersion = 'error: ' + e.message }
+      try {
+        const v = String((await runProcess(nr.cmd, ['--version'], { timeoutMs: 20000, maxOutputChars: 4096, env: nr.env })).stdout).trim()
+        res.nodeVersion = v + ' (' + nr.cmd + ')'
+      } catch (e) { res.nodeVersion = 'error: ' + e.message + ' (' + nr.cmd + ')' }
       res.checks = { entryExists: false, vendorDir: false }
       try { res.checks.entryExists = fs.statSync(entry).isFile() } catch { res.checks.entryExists = false }
       try { res.checks.vendorDir = fs.statSync(path.dirname(entry)).isDirectory() } catch { res.checks.vendorDir = false }
@@ -175,7 +188,7 @@ export function apply(ctx, config) {
         return clean(res)
       }
       try {
-        const r = await runProcess(config.nodeBin, [entry, '--help'], Object.assign(common(config, {}, exec, 60000), { maxOutputChars: 20000 }))
+        const r = await runProcess(nr.cmd, [entry, '--help'], Object.assign(common(config, {}, exec, 60000), { maxOutputChars: 20000, env: nr.env }))
         res.ok = r.exitCode === 0
         res.exitCode = r.exitCode
         res.stdout = r.stdout
@@ -287,10 +300,11 @@ export function apply(ctx, config) {
           owner: exec && exec.agent ? exec.agent : null,
           outputLimitBytes: config.maxOutputChars,
           run() {
+            const nr = nodeRuntime(config)
             const done = (async () => {
               try {
-                push('$ ' + config.nodeBin + ' ' + entry + ' ' + argv.join(' ') + '\n')
-                const r = await runProcess(config.nodeBin, [entry].concat(argv), Object.assign({}, opts, { signal: undefined, onData: push }))
+                push('$ ' + nr.cmd + ' ' + entry + ' ' + argv.join(' ') + '\n')
+                const r = await runProcess(nr.cmd, [entry].concat(argv), Object.assign({}, opts, { signal: undefined, onData: push, env: nr.env }))
                 const projects = findProjects(outDir, started)
                 if (r.exitCode === 0) return { status: 'completed', detail: '产物 ' + projects.length + ' 个工程' }
                 return { status: 'failed', detail: 'exit=' + r.exitCode + ' ' + String(r.stderr).slice(-300) }
@@ -314,9 +328,10 @@ export function apply(ctx, config) {
       }
 
       const started = Date.now()
+      const nr = nodeRuntime(config)
       let r
       try {
-        r = await runProcess(config.nodeBin, [entry].concat(argv), opts)
+        r = await runProcess(nr.cmd, [entry].concat(argv), Object.assign({}, opts, { env: nr.env }))
       } catch (e) {
         return { ok: false, error: e.message, outDir, entry }
       }

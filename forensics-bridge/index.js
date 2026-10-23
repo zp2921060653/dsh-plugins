@@ -1,6 +1,6 @@
 // dsh-forensics — 取证工具箱：逆向(r2/RetDec) + 抓包(tshark/mitm) + 网页(trafilatura/crawl4ai/single-file/monolith)
 import { defineTool } from '@deepseek-ai/dsh-tools'
-import Schema from 'schemastery'
+import Schema from '@deepseek-ai/schemastery'
 import { r2Info, r2Functions, r2Disasm, retdecDecompile } from './lib/adapters/rev.js'
 import { tsharkCapture, tsharkRead, tsharkInterfaces, mitmStart } from './lib/adapters/net.js'
 import { pageExtract, crawlPage, clonePage } from './lib/adapters/web.js'

@@ -1,6 +1,6 @@
 {
   "name": "dsh-forensics",
-  "version": "0.1.0",
+  "version": "0.1.3",
   "description": "Forensics toolkit: radare2/RetDec reverse engineering, tshark/mitmproxy packet capture, trafilatura/crawl4ai web scraping, single-file/monolith webpage cloning.",
   "type": "module",
   "main": "index.js",

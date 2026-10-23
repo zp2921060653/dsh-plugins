@@ -3,6 +3,14 @@ import asyncio
 import json
 import sys
 
+# Windows 控制台/管道默认可能是 GBK，输出非 GBK 字符会 UnicodeEncodeError
+try:
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+    sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+except Exception:
+    pass
+
+
 async def main():
     url = sys.argv[1] if len(sys.argv) > 1 else ''
     if not url:

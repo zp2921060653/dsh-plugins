@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Browser Bridge",
+    "description": "Drives a real Chromium browser over CDP: open pages, click, read JS-rendered content, and inspect network responses."
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "dsh-browser",
+  "version": "0.1.0",
+  "description": "Drive a real Chromium browser from DSH over CDP: navigate, click, read rendered content, and inspect network responses. UNVERIFIED: only basic paths were exercised on one Windows machine.",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "lib",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "README.md"
+  ],
+  "engines": { "node": ">=22" },
+  "license": "MIT",
+  "dsh": { "bundle": { "patch": "./cordis.patch.yml" } }
+}

@@ -1,6 +1,6 @@
 // 网页适配器：trafilatura（正文提取）+ crawl4ai（LLM 抓取）+ single-file/monolith（网页复刻）
 import { runProcess } from '../run.js'
-import { detectTools, pyScriptsDir, npmGlobalDir, toolsRoot } from '../detect.js'
+import { detectTools, pyScriptsDir, npmGlobalDir, toolsRoot, pythonPath } from '../detect.js'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { existsSync } from 'node:fs'
@@ -14,7 +14,7 @@ async function exec(t, bin, args, opts, envExtra) {
 export async function pageExtract(url, opts) {
   const t = detectTools(opts.config)
   if (!t.trafilatura || !t.trafilatura.toLowerCase().endsWith('trafilatura.exe')) return { ok: false, error: '未找到 trafilatura；预期位置: ' + pyScriptsDir() + '\\trafilatura.exe' }
-  const r = await exec(t, t.trafilatura, ['-u', url, '--output-format', 'markdown'], opts)
+  const r = await exec(t, t.trafilatura, ['-u', url, '--output-format', 'markdown'], opts, { PYTHONIOENCODING: 'utf-8', PYTHONUTF8: '1' })
   return { ...r, url }
 }
 
@@ -22,8 +22,10 @@ export async function pageExtract(url, opts) {
 export async function crawlPage(url, opts) {
   const t = detectTools(opts.config)
   const script = fileURLToPath(new URL('../../scripts/crawl4ai_fetch.py', import.meta.url))
-  const args = ['-' + t.crawlPy, script, url]
-  const r = await exec(t, 'py', args, { ...opts, timeoutMs: opts.timeoutMs || 120000 })
+  if (!t.python) return { ok: false, url, error: '未找到 Python 3.13 解释器；预期位置: ' + pythonPath() }
+  // 直接用绝对解释器路径：官方桌面安装不保证 `py` 启动器在 PATH 里
+  const args = [script, url]
+  const r = await exec(t, t.python, args, { ...opts, timeoutMs: opts.timeoutMs || 120000 }, { PYTHONIOENCODING: 'utf-8', PYTHONUTF8: '1' })
   // 尝试解析脚本输出的 JSON
   let parsed = null
   try {
