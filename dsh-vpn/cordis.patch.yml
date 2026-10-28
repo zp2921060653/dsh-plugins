@@ -1,0 +1,10 @@
+# dsh-vpn bundle patch —— 让 DSH 拥有自己的代理内核（mihomo）与订阅管理能力。
+# 插件行按包名引用；需要覆盖配置时，在 profile 的 cordis.patch.yml 中按 id 覆盖本行：
+#   - id: dsh-vpn
+#     name: dsh-vpn
+#     config:
+#       subscriptionUrl: 'https://...'
+#       enabled: true
+- insert:
+    - id: dsh-vpn
+      name: dsh-vpn

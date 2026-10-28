@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "VPN Proxy",
+    "description": "Built-in VPN/proxy for DSH: paste a Clash Verge subscription so DSH egresses through its bundled mihomo core; toggle the connection, switch nodes, run latency tests, and read the subscription's node count, remaining traffic, and expiry from the settings page. A manual Windows system-proxy switch (browsers / other apps) can also route local apps through the plugin and restores the previous proxy settings when turned off."
+  }
+}

@@ -14,6 +14,7 @@
 | dsh-micropather | 0.1.2 | MicroPather（C++ A*）网格寻路：给出一张网格与起终点，返回路径点与代价 | [micropather-bridge/](micropather-bridge/) | 已验证 |
 | dsh-dumper7 | 0.1.0 | 把 Dumper-7 注入 UE 游戏进程并检视生成的 SDK | [dumper7-bridge/](dumper7-bridge/) | 已验证 |
 | dsh-browser | 0.1.0 | 用 CDP 驱动真实 Chromium：导航/点击/读渲染后的正文/直接读网络响应体（XHR JSON） | [browser-bridge/](browser-bridge/) | ⚠️ **未验证** |
+| dsh-vpn | 0.2.0 | DSH 自带 VPN/代理能力：粘贴 Clash 订阅地址，插件内置 mihomo 内核独立出网（不再依赖本机 Clash/系统代理）；设置页可手动开/关 **Windows 系统代理**，让浏览器等本机软件也走插件，关闭/停用/退出自动精确还原 | [dsh-vpn/](dsh-vpn/) | 已验证 |
 | dsh-wukong-trainer-skill | — | 黑神话·悟空（UE5 + C# 托管层）修改器制作方法论：属性数组公式、属性 ID 表、五类功能手法、AOB+代码洞穴注入流程、7 个实战坑（**WIP：属性/传送/掉落已验证，灵蕴/无敌/速度待补**） | [wukong-trainer-skill/](wukong-trainer-skill/) | WIP |
 
 ## 状态说明
@@ -44,7 +45,15 @@
     # 安装提醒插件（web/profile 模式通用，也可用 web）
     & "$env:APPDATA\DSH Desktop\host-commands\web\bin\dsh.cmd" plugin --profile web add .\dsh-plugins\reminder-bridge
 
+    # 安装 VPN 插件（内置 mihomo 内核 + 系统代理开关）
+    & "$env:APPDATA\DSH Desktop\host-commands\desktop\bin\dsh.cmd" plugin --profile desktop add .\dsh-plugins\dsh-vpn
+
 其余插件同理，把 `add` 后面的目录换成对应的 `*-bridge` 目录即可。然后重启 DSH，插件在启动时加载。
+
+> **DSH 0.2.1-rc.3 的本地插件解析注意**：以目录方式安装的插件，从 `index.js` 里 `import` DSH 自带包
+> （如 `@deepseek-ai/dsh-tools`、`@deepseek-ai/schemastery`、`@deepseek-ai/dsh-http-proxy`）时，必须在
+> 该插件 `package.json` 的 `peerDependencies` 中声明这些包名，否则运行时会报
+> `ERR_MODULE_NOT_FOUND`（见 `dsh-vpn/package.json` 的写法）。
 
 > `dsh-ghidra` 的包名与 npm 上第三方同名包相同，安装时请以本仓库目录为准。
 
@@ -58,6 +67,7 @@
 - [micropather-bridge/README.md](micropather-bridge/README.md) — 工具：`micropather_solve` / `micropather_info`
 - [dumper7-bridge/README.md](dumper7-bridge/README.md) — 工具：`dumper7_status` / `dumper7_dump` / `dumper7_sdk` / `dumper7_class`
 - [browser-bridge/README.md](browser-bridge/README.md) — 工具：`browser` / `browser_read`（⚠️ 未验证）
+- [dsh-vpn/README.md](dsh-vpn/README.md) — 工具：`vpn`（status / enable / disable / subscription / update / nodes / select / test / mode / system-proxy）；设置页「VPN」：订阅、节点、测速、rule/global、系统代理开关；内置 `mihomo.exe`（GPL-3.0，见目录内 LICENSE-NOTICE）
 - [wukong-trainer-skill/README.md](wukong-trainer-skill/README.md) — 技能（skill），不是 bundle：放进 DSH 的 skills 目录即可被模型按需加载
 
 ## 许可

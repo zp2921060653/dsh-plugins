@@ -1,0 +1,51 @@
+{
+  "name": "dsh-vpn",
+  "version": "0.2.0",
+  "description": "DSH 自带 VPN/代理能力：粘贴 Clash Verge 订阅地址，DSH 用自带的代理内核独立出网，不再依赖本机 VPN；可选手动开启 Windows 系统代理让浏览器等本机软件也用。",
+  "private": true,
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "lib",
+    "tools",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "README.md",
+    "LICENSE-NOTICE.md",
+    "third_party",
+    "bin/mihomo.exe",
+    "data/Country.mmdb"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT",
+  "peerDependencies": {
+    "@deepseek-ai/dsh-http-proxy": "*",
+    "@deepseek-ai/dsh-tools": "*",
+    "@deepseek-ai/schemastery": "*",
+    "undici": "*"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-settings-general"
+      ]
+    }
+  }
+}

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="dsh-vpn">
+  <defs>
+    <linearGradient id="dshvpn-tile" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1e40af"/>
+      <stop offset="1" stop-color="#0e3074"/>
+    </linearGradient>
+    <linearGradient id="dshvpn-shield" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#eff6ff"/>
+      <stop offset="1" stop-color="#93c5fd"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="15" fill="url(#dshvpn-tile)"/>
+  <path d="M32 10.5 50 18v12.9c0 9.5-6.8 16.5-18 20.6-11.2-4.1-18-11.1-18-20.6V18l18-7.5Z" fill="#dbeafe" fill-opacity="0.14"/>
+  <path d="M32 10.5 50 18v12.9c0 9.5-6.8 16.5-18 20.6-11.2-4.1-18-11.1-18-20.6V18l18-7.5Z" fill="none" stroke="url(#dshvpn-shield)" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M24 27h16M24 27l8 15M40 27l-8 15" fill="none" stroke="#93c5fd" stroke-width="1.6" stroke-linecap="round" opacity="0.85"/>
+  <circle cx="24" cy="27" r="3.1" fill="#60a5fa"/>
+  <circle cx="32" cy="27" r="3.4" fill="#eff6ff"/>
+  <circle cx="40" cy="27" r="3.1" fill="#60a5fa"/>
+  <circle cx="32" cy="42" r="2.6" fill="#bfdbfe"/>
+</svg>
