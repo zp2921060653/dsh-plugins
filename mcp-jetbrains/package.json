@@ -1,0 +1,70 @@
+{
+  "name": "dsh-mcp-jetbrains",
+  "version": "0.10.0",
+  "type": "module",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "description": "Multi-connection manager that connects DSH to the MCP servers built into JetBrains IDEs (IntelliJ IDEA, CLion, PyCharm), with an editable settings page in the DSH Web UI. Connections persist in the plugin's own store, never in the profile patch. Background probes remount a stale or restarted connection automatically, a forced surface check runs when the settings page opens, and a failed MCP tool call is diagnosed and retried at most once. A store-level ideIo switch forces read/write/edit through the selected IDE (read_file / create_new_file / apply_patch) and refuses instead of ever falling back to disk. Every settings route runs behind DSH's own browser trust.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/darkwithlight/dsh-mcp-jetbrains.git"
+  },
+  "homepage": "https://github.com/darkwithlight/dsh-mcp-jetbrains#readme",
+  "bugs": {
+    "url": "https://github.com/darkwithlight/dsh-mcp-jetbrains/issues"
+  },
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "mcp",
+    "jetbrains",
+    "intellij",
+    "idea",
+    "clion",
+    "pycharm",
+    "mcp-client"
+  ],
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./assets/icon.svg"
+  },
+  "files": [
+    "lib",
+    "client.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "assets",
+    "SAFETY.md",
+    "SAFETY.en.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.host.json && tsc -p tsconfig.client.json"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/dsh-mcp-client": "*",
+    "@deepseek-ai/schemastery": "*"
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.2",
+    "typescript": "^5.9.3"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-client-ui-settings",
+        "@deepseek-ai/dsh-client-ui-settings-plugins"
+      ]
+    }
+  }
+}

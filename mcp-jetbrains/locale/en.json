@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "JetBrains IDE MCP connections",
+    "description": "Multi-connection manager that connects DSH to the MCP servers built into JetBrains IDEs, so the agent sees each IDE's inspections, builds, symbol analysis and run configurations instead of a disk-only view. One connection per IDE (IntelliJ IDEA, CLion, PyCharm); each mounts its own MCP client and exposes mcp__<serverName>__* tools."
+  }
+}

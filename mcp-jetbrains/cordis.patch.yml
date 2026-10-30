@@ -1,0 +1,12 @@
+# One row: this bundle's own Host plugin, which mounts the mcp-client children
+# itself. The id `jetbrains-mcp` is this entry's stable Loader id, so a reinstall
+# reuses the entry instead of adding a second row.
+#
+# `config` stays empty on purpose: connection rows live in the plugin's own store
+# ($DSH_HOME/storages/dsh-mcp-jetbrains.connections.json), not in a profile patch — the
+# profile patch row is Loader-owned and a settings save there would be overwritten
+# by whoever else manages that file (on this machine, the skin manager's block).
+- insert:
+    - id: jetbrains-mcp
+      name: dsh-mcp-jetbrains
+      config: {}

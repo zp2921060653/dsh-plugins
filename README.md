@@ -15,6 +15,7 @@
 | dsh-dumper7 | 0.1.0 | 把 Dumper-7 注入 UE 游戏进程并检视生成的 SDK | [dumper7-bridge/](dumper7-bridge/) | 已验证 |
 | dsh-browser | 0.1.0 | 用 CDP 驱动真实 Chromium：导航/点击/读渲染后的正文/直接读网络响应体（XHR JSON） | [browser-bridge/](browser-bridge/) | ⚠️ **未验证** |
 | dsh-vpn | 0.2.0 | DSH 自带 VPN/代理能力：粘贴 Clash 订阅地址，插件内置 mihomo 内核独立出网（不再依赖本机 Clash/系统代理）；设置页可手动开/关 **Windows 系统代理**，让浏览器等本机软件也走插件，关闭/停用/退出自动精确还原 | [dsh-vpn/](dsh-vpn/) | 已验证 |
+| dsh-mcp-jetbrains | 0.10.0 | 把 JetBrains IDE 内置的 MCP Server 接成 DSH 工具（IDEA / CLion / PyCharm）：诊断、构建、搜索/重构、run configuration、调试、终端、数据库、Git。内置副本，见 [mcp-jetbrains/NOTICE.md](mcp-jetbrains/NOTICE.md) | [mcp-jetbrains/](mcp-jetbrains/) | 本机 IDEA 2026.2.3 验证 |
 | dsh-wukong-trainer-skill | — | 黑神话·悟空（UE5 + C# 托管层）修改器制作方法论：属性数组公式、属性 ID 表、五类功能手法、AOB+代码洞穴注入流程、7 个实战坑（**WIP：属性/传送/掉落已验证，灵蕴/无敌/速度待补**） | [wukong-trainer-skill/](wukong-trainer-skill/) | WIP |
 
 ## 状态说明
@@ -44,6 +45,9 @@
 
     # 安装提醒插件（web/profile 模式通用，也可用 web）
     & "$env:APPDATA\DSH Desktop\host-commands\web\bin\dsh.cmd" plugin --profile web add .\dsh-plugins\reminder-bridge
+
+    # 安装 JetBrains MCP 桥（IDEA/CLion/PyCharm，需先在 IDE 打开 MCP Server）
+    & "$env:APPDATA\DSH Desktop\host-commands\desktop\bin\dsh.cmd" plugin --profile desktop add .\dsh-plugins\mcp-jetbrains
 
     # 安装 VPN 插件（内置 mihomo 内核 + 系统代理开关）
     & "$env:APPDATA\DSH Desktop\host-commands\desktop\bin\dsh.cmd" plugin --profile desktop add .\dsh-plugins\dsh-vpn

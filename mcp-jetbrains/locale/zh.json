@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "JetBrains IDE MCP 多连接",
+    "description": "把 DSH 接到 JetBrains IDE 内置 MCP Server 的多连接管理器：每条连接对应一个 IDE（IntelliJ IDEA、CLion、PyCharm），各自挂一个 MCP 客户端，让智能体看到 IDE 的检查结果、构建、符号分析与运行配置，而不是只有一份磁盘视角；工具名仍是 mcp__<serverName>__*。"
+  }
+}
