@@ -47,8 +47,9 @@ window.__ModuleLoader__.load({
 
     // ── 线路校验器（与 host 面 zod 清单对应，宽松校验必要字段）──────────────
     // client 面注册 remote 调用时，descriptor.result / parameters[].codec 必须
-    // 是严格 codec { mode:'strict', typeSymbol, schema:{ parse } }，否则
-    // typert-registry 的 validateInvocation 会抛错，导致插件 boot 失败。
+    // 是严格 codec { mode:'strict', typeSymbol, create }，其中 create() 返回
+    // 带 parse() 的对象；否则 typert-registry 的 validateInvocation 会抛
+    // "strict codec has no create() factory"，导致插件 boot 失败。
 
     function fail(path, expect) {
       throw new Error('dsh-reminder: 服务端数据非法 (' + path + ': ' + expect + ')')
@@ -70,8 +71,13 @@ window.__ModuleLoader__.load({
       if (v === null || typeof v !== 'object' || Array.isArray(v)) fail(path, 'object')
       return v
     }
-    function codecOf(parse) {
-      return { parse }
+    function codecOf(typeSymbol, parse) {
+      return {
+        mode: 'strict',
+        typeSymbol,
+        create: () => ({ parse }),
+        decode: (value) => parse(value),
+      }
     }
 
     // ── 样式（主题变量） ─────────────────────────────────────────────────────
@@ -208,7 +214,7 @@ window.__ModuleLoader__.load({
           method: 'getConfig',
           invocation: { kind: 'direct' },
           parameters: [],
-          result: { mode: 'strict', typeSymbol: 'dsh-reminder#ReminderConfig', schema: codecOf(parseConfig) },
+          result: codecOf('dsh-reminder#ReminderConfig', parseConfig),
         },
         {
           id: 'dsh-reminder#reminderConfig/setConfig',
@@ -221,10 +227,10 @@ window.__ModuleLoader__.load({
               name: 'patch',
               wire: 'patch',
               source: 'json',
-              codec: { mode: 'strict', typeSymbol: 'dsh-reminder#ReminderConfigPatch', schema: codecOf(parsePatch) },
+              codec: codecOf('dsh-reminder#ReminderConfigPatch', parsePatch),
             },
           ],
-          result: { mode: 'strict', typeSymbol: 'dsh-reminder#ReminderConfig', schema: codecOf(parseConfig) },
+          result: codecOf('dsh-reminder#ReminderConfig', parseConfig),
         },
       ],
     }

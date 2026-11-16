@@ -4,8 +4,10 @@
  * typert-registry 的 validateInvocation 校验规则一致：
  *  - TYPERT.model 必须是对象，含 services / events / objects 三个数组；
  *  - invocation 的 parameters 每项需 { name, wire, source, codec }；
- *  - codec / result 必须是严格 codec：{ mode:'strict', typeSymbol, schema }；
- *  - schema 必须是 zod v4 实例（含 _zod 与 parse）。
+ *  - codec / result 必须是严格 codec：{ mode:'strict', typeSymbol, create }；
+ *    其中 create() 必须返回 zod v4 实例（含 _zod 与 parse）；旧版写的 schema: z.xxx
+ *    会被 typert-loader 以 "has no create() factory" 拒绝，并连带撤回本进程所有
+ *    strict 定义（settings/describe 等官方 RPC 全部 500/definition-unavailable）。
  */
 
 import { z } from 'zod'
@@ -47,7 +49,7 @@ export const TYPERT = {
       result: {
         mode: 'strict',
         typeSymbol: 'dsh-reminder#ReminderConfig',
-        schema: configCodec,
+        create: () => configCodec,
       },
     },
     {
@@ -64,14 +66,14 @@ export const TYPERT = {
           codec: {
             mode: 'strict',
             typeSymbol: 'dsh-reminder#ReminderConfigPatch',
-            schema: patchCodec,
+            create: () => patchCodec,
           },
         },
       ],
       result: {
         mode: 'strict',
         typeSymbol: 'dsh-reminder#ReminderConfig',
-        schema: configCodec,
+        create: () => configCodec,
       },
     },
   ],
